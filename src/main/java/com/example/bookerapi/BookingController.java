@@ -1,5 +1,6 @@
 package com.example.bookerapi;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -32,7 +33,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<Booking> save(@RequestBody Booking booking) {
+    public ResponseEntity<Booking> save(@Valid @RequestBody Booking booking) {
         Booking saved = service.save(booking);
         var uri = UriComponentsBuilder
                 .fromPath("/{id}")
