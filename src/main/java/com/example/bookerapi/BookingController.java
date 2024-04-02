@@ -5,41 +5,37 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/bookings")
 public class BookingController {
-    private final BookingRepository repository;
     private final BookingService service;
 
-    public BookingController(BookingRepository repository, BookingService service) {
-        this.repository = repository;
+    public BookingController(BookingService service) {
         this.service = service;
     }
 
     @GetMapping
     Collection<Booking> bookings() {
-        return this.repository.findAll();
+        return this.service.listAll();
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Booking> findById(@PathVariable("id") long id) {
-        Optional<Booking> booking = repository.findById(id);
-        return ResponseEntity.ok(booking.get());
+        return ResponseEntity.ok(service.findById(id));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") long id) {
-        repository.deleteById(id);
+        service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping
     public ResponseEntity<Booking> save(@RequestBody Booking booking) {
-        Booking saved = repository.save(booking);
+        Booking saved = service.save(booking);
         var uri = UriComponentsBuilder
-                .fromPath("/seller/{id}")
+                .fromPath("/{id}")
                 .buildAndExpand(saved.getId())
                 .toUri();
         return ResponseEntity.created(uri).body(saved);
@@ -47,7 +43,7 @@ public class BookingController {
 
     @PutMapping
     public ResponseEntity<Booking> update(@RequestBody Booking booking) {
-        Booking saved = repository.save(booking);
+        Booking saved = service.save(booking);
         return ResponseEntity.ok(saved);
     }
 }
