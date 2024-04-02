@@ -11,6 +11,10 @@ public class BookingCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        //printAllBookings();
+    }
+
+    private void printAllBookings() {
         for (var b : this.repository.findAll()) {
             System.out.println(b.toString());
         }
